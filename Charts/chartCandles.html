@@ -1,0 +1,36 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>
+      Candle Stick
+    </title>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load('visualization', '1', {packages: ['corechart']});
+    </script>
+    <script type="text/javascript">
+      function drawVisualization() {
+        
+        ###data###
+
+        ###options###
+					 
+        var chart = new google.visualization.CandlestickChart(document.getElementById('chart_div'));
+		chart.draw(data, options);	 
+      }
+
+       
+	  function selectHandler() {
+        var selectedItem = chart.getSelection()[0];
+        var value = data.getValue(selectedItem.row, 0);
+        alert('The user selected ' + value);
+      }
+
+	  google.setOnLoadCallback(drawVisualization);
+	 
+    </script>
+  </head>
+  <body>
+    <div id="chart_div" style="width: 500px; height: 500px;"></div>
+  </body>
+</html>

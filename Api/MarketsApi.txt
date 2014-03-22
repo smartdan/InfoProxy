@@ -1,0 +1,82 @@
+﻿http://bitcoincharts.com/markets/bitstampUSD.html
+http://bitcoincharts.com/markets/bitstampUSD_trades.html
+http://bitcoincharts.com/markets/bitstampUSD_depth.html
+
+http://api.bitcoincharts.com/v1/csv/bitstampUSD.csv
+http://api.bitcoincharts.com/v1/trades.csv?symbol=bitstampUSD
+http://api.bitcoincharts.com/v1/markets.json
+http://api.bitcoincharts.com/v1/weighted_prices.json
+
+
+Markets API
+API Overview
+
+Bitcoincharts provides a simple API to most of its data. You can use this API to include markets data in your websites, mobile apps or desktop applets. Please remember to add a link to Bitcoincharts!
+
+Bitcoincharts' API is accessable through HTTP
+Parameters are passed using GET-requests
+returned data is JSON encoded
+Don't query more often than once every 15 minutes!
+Weighted Prices
+
+Bitcoincharts offers weighted prices for several currencies at http://api.bitcoincharts.com/v1/weighted_prices.json. You can use this to price goods and services in Bitcoins. This will yield much lower fluctuations than using a single market's latest price.
+
+Weighted prices are calculated for the last 24 hours, 7 days and 30 days. If there are no trades during an interval (like no trade within 24 hours) no value will be returned. Prepare your code to handle this cases!
+
+The returned JSON is dictionary with elements for each currency. Each currency has up to three key-value pairs: 24h, 7d and 30d.
+
+Markets Data
+
+You can access general market data at http://api.bitcoincharts.com/v1/markets.json. This will return an array with elements for each market. Returned fields per market are:
+
+symbol
+short name for market
+currency
+base currency of the market (USD, EUR, RUB, JPY, ...)
+bid
+highest bid price
+ask
+lowest ask price
+latest_trade
+unixtime of latest trade. Following fields relate to the day of this field (UTC)!
+n_trades
+number of trades
+open
+first trade of day
+high
+highest trade during day
+low
+lowest trade during day
+close
+latest trade
+previous_close
+atest trade of previous day
+volume
+total trade volume of day in BTC
+currency_volume
+total trade volume of day in currency
+Historic Trade Data
+
+Trade data is available as CSV, delayed by approx. 15 minutes. It will return the 2000 most recent trades.
+
+http://api.bitcoincharts.com/v1/trades.csv?symbol=SYMBOL[&start=UNIXTIME]
+
+returns CSV:
+
+unixtime,price,amount
+You can use the start parameter to specify an earlier unix timestamp in order to retrieve older data.
+
+Examples
+
+Latest mtgoxUSD trades:
+http://api.bitcoincharts.com/v1/trades.csv?symbol=mtgoxUSD
+
+btcexYAD trades after 1303100000:
+http://api.bitcoincharts.com/v1/trades.csv?symbol=btcexYAD&start=1303100000
+You can fetch the complete history at http://api.bitcoincharts.com/v1/csv/.
+
+Telnet interface
+
+There is an experimental telnet streaming interface on TCP port 27007 at bitcoincharts.com.
+
+This service is strictly for personal use. Do not assume this data to be 100% accurate or write trading bots that rely on it.

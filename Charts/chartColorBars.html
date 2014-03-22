@@ -1,0 +1,67 @@
+﻿<!--
+You are free to copy and use this sample in accordance with the terms of the
+Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Color bars </title>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        google.load('visualization', '1', { packages: ['imagechart'] });
+    </script>
+    <script type="text/javascript">
+        // This function applies color formatting to a bar chart,
+        // by calculating the color of each bar based on the data.
+        function drawVisualization() {
+            // Create and populate the data table.
+            var last = '###last###';
+            var data = google.visualization.arrayToDataTable([
+            ###data###
+            // Treat first row as data as well.
+            ], true);
+
+            var red = 'ff0000';
+            var green = '00ff00';
+            var yellow = 'ffff00';
+
+            // Loop over the data table to create the color specification.
+            var colors = [];
+            for (var i = 0; i < data.getNumberOfRows(); i++) {
+                var value = data.getValue(i, 0);
+                var color = value < last ? red : green;
+                colors.push(color);
+            }
+            colors = colors.join('|');
+
+            var options = { cht: 'bvs',
+            chco: colors, 
+            hAxis: {title: 'Bid / Ask', titleTextStyle: {color: 'red'}}
+            };
+
+            // Create and draw the visualization.
+            new google.visualization.ImageChart(document.getElementById('visualization')).
+          draw(data, options);
+        }
+
+
+        google.setOnLoadCallback(drawVisualization);
+    </script>
+</head>
+<body style="font-family: Arial; border: 0 none;">
+    <div id="visualization" style="width: 100%; height: 98%;">
+    </div>
+   <!-- <table style="width: 100%;">
+        <tr>
+            <td style="width: 50%;">
+                Bids
+            </td>
+            <td style="width: 50%;">
+                Asks
+            </td>
+        </tr>
+    </table>-->
+</body>
+</html>
+​

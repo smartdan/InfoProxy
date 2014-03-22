@@ -1,0 +1,312 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<!-- POMEMBNO! tu mora biti pravilna koda jezika -->
+<head>
+    <meta charset="utf-8">
+    <title>API - Bitstamp</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="European based bitcoin exchange" />
+    <meta name="keywords" content="bitcoin" />
+    <link rel="stylesheet" href="/s/css/main.10.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/s/css/main_responsive.2.css" type="text/css" media="screen" />
+    <link rel="alternate" type="application/rss+xml" title="Bitstamp News" href="https://www.bitstamp.net/news/feed/" />
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <!-- Icons -->
+    <link rel="shortcut icon" href="/s/icons/favicon.ico" />
+    <!-- Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800'
+        rel='stylesheet' type='text/css'>
+</head>
+<body>
+    <header class="main_header clearfix"></header>
+    <div class="cell">
+        <div class="container">
+            <div class="main_content clearfix">
+                <div class="content">
+                    <header class="clearfix"><h1>API</h1></header>
+                    <h2>
+                        Che cos'è un API?</h2>
+                    <p>
+                        La Bitstamp application programming interface (API) permette ai nostri clienti di
+                        creare software personalizzato per accedere e interagire con il proprio conto.</p>
+                    <h2>
+                        Limiti di richiesta.</h2>
+                    <p>
+                        Non fate più di 600 richieste in 10 minuti o verrà bannato il vostro indirizzo IP.</p>
+                    <h2>
+                        Funzioni dei dati pubblici</h2>
+                    <h4>
+                        Ticker</h4>
+                    <p>
+                        <i>GET https://www.bitstamp.net/api/ticker/</i></p>
+                    <p>
+                        Dizionario JSON restituisce:</p>
+                    <ul>
+                        <li>last - ultimo valore del BTC</li><li>high - Prezzo elevato delle ultime 24 ore</li><li>
+                            low - Prezzo basso delle ultime 24 ore</li><li>volume - volume delle ultime 24 ore</li><li>
+                                bid - Più alto ordine di acquisto</li><li>ask - ordine di vendita più basso</li></ul>
+                    <h4>
+                        Promemoria degli ordini</h4>
+                    <p>
+                        <i>GET https://www.bitstamp.net/api/order_book/</i></p>
+                    <p>
+                        Params:</p>
+                    <ul>
+                        <li>group - ordini di gruppo con lo stesso prezzo (0 - false; 1 - true). Default: 1.</li></ul>
+                    <p>
+                        Restituisce il dizionario JSON con "offerte" e "richieste". Ognuno è un elenco di
+                        ordini aperti ed ogni ordine è rappresentato come una lista di prezzi e quantità.</p>
+                    <h4>
+                        Transazioni</h4>
+                    <p>
+                        <i>GET https://www.bitstamp.net/api/transactions/</i></p>
+                    <p>
+                        Params:</p>
+                    <ul>
+                        <li>time - time frame for transaction export ("minute" - 1 minute, "hour" - 1 hour).
+                            Default: hour.</li></ul>
+                    <p>
+                        Restituisce un elenco JSON descrescente delle transazioni. Ogni transazione (dizionario)
+                        contiene:</p>
+                    <ul>
+                        <li>date - unix timestamp data e ora</li><li>tid - id di transazione</li><li>price -
+                            Prezzo BTC</li><li>amount - Quantità di BTC</li></ul>
+                    <h4>
+                        Tasso di conversione EUR/USD (Euro/Dollaro statunitense)</h4>
+                    <p>
+                        <i>GET https://www.bitstamp.net/api/eur_usd/</i></p>
+                    <p>
+                        Dizionario JSON restituisce:</p>
+                    <ul>
+                        <li>buy - Acquista ad attuale tasso di conversione</li><li>sell - Vendi ad attuale tasso
+                            di conversione</li></ul>
+                    <h1>
+                        API authentication</h1>
+                    <p>
+                        All private API calls require authentication. You need to provide 3 parameters to
+                        authenticate a request:</p>
+                    <ul>
+                        <li>API key</li><li>Nonce</li><li>Signature</li></ul>
+                    <h4>
+                        API key</h4>
+                    <p>
+                        To get an API key, go to "Account", "Security" and then "API Access". Set permissions
+                        and click "Generate key".</p>
+                    <h4>
+                        Nonce</h4>
+                    <p>
+                        Nonce is a regular integer number. It must be increasing with every request you
+                        make. Read more about it <a href="http://en.wikipedia.org/wiki/Cryptographic_nonce"
+                            target="_blank">here</a>. Example: if you set nonce to 1 in your first request,
+                        you must set it to at least 2 in your second request. You are not required to start
+                        with 1. A common practice is to use <a href="http://en.wikipedia.org/wiki/Unix_time"
+                            target="_blank">unix time</a> for that parameter.</p>
+                    <h4>
+                        Signature</h4>
+                    <p>
+                        Signature is a HMAC-SHA256 encoded message containing: nonce, client ID and API
+                        key. The HMAC-SHA256 code must be generated using a secret key that was generated
+                        with your API key. This code must be converted to it's hexadecimal representation
+                        (64 uppercase characters).</p>
+                    <p>
+                        <i>Example (Python):<br />
+                            message = nonce + client_id + api_key<br />
+                            signature = hmac.new(API_SECRET, msg=message, digestmod=hashlib.sha256).hexdigest().upper()
+                        </i>
+                    </p>
+                    <h1>
+                        Private Functions</h1>
+                    <h4>
+                        Saldo del conto</h4>
+                    <p>
+                        <i>POST https://www.bitstamp.net/api/balance/</i></p>
+                    <p>
+                        Params:</p>
+                    <ul>
+                        <li>key - API key</li><li>signature - signature</li><li>nonce - nonce</li></ul>
+                    <p>
+                        Dizionario JSON restituisce:</p>
+                    <ul>
+                        <li>usd_balance - Saldo in USD</li><li>btc_balance - Saldo in BTC</li><li>usd_reserved
+                            - USD riservato in ordini aperti</li><li>btc_reserved - BTC riservato in ordini aperti</li><li>
+                                usd_available- USD disponibili per effettuare transazioni</li><li>btc_available - BTC
+                                    disponibile per le transazioni</li><li>fee - commissione sulle transazioni del cliente</li></ul>
+                    <h4>
+                        Transazioni dell'utente</h4>
+                    <p>
+                        <i>POST https://www.bitstamp.net/api/user_transactions/</i></p>
+                    <p>
+                        Params:</p>
+                    <ul>
+                        <li>key - API key</li><li>signature - signature</li><li>nonce - nonce</li><li>offset
+                            - skip that many transactions before beginning to return results. Default: 0.</li><li>
+                                limit - limitare il risultato di molte operazioni. Default: 100.</li><li>sort - sorting
+                                    by date and time (asc - ascending; desc - descending). Default: desc.</li></ul>
+                    <p>
+                        Restituisce un elenco JSON descrescente delle transazioni. Ogni transazione (dizionario)
+                        contiene:</p>
+                    <ul>
+                        <li>datetime - data e ora</li><li>id - id di transazione</li><li>type - tipo di transazione
+                            (0 - deposito; 1 - ritiro; 2 - transazioni di mercato)</li><li>usd - Importo USD</li><li>
+                                btc - Quantità di BTC</li><li>fee - tassa di transazione</li><li>oder_id - id ordine
+                                    eseguito</li></ul>
+                    <h4>
+                        Ordini aperti</h4>
+                    <p>
+                        <i>POST https://www.bitstamp.net/api/open_orders/</i></p>
+                    <p>
+                        Params:</p>
+                    <ul>
+                        <li>key - API key</li><li>signature - signature</li><li>nonce - nonce</li></ul>
+                    <p>
+                        Restituisce JSON elenco di ordini aperti. Ogni ordine è rappresentato come un dizionario:</p>
+                    <ul>
+                        <li>id - ID ordine</li><li>datetime - data e ora</li><li>type - acquistare o vendere
+                            (0 - acquistare; 1 - vendere)</li><li>price - prezzo</li><li>amount - importo</li></ul>
+                    <h4>
+                        Annulla ordine</h4>
+                    <p>
+                        <i>POST https://www.bitstamp.net/api/cancel_order/</i></p>
+                    <p>
+                        Params:</p>
+                    <ul>
+                        <li>key - API key</li><li>signature - signature</li><li>nonce - nonce</li><li>id - ordine
+                            ID</li></ul>
+                    <p>
+                        Risponde 'vero' se l'ordine è stato trovato e annullato.</p>
+                    <h4>
+                        Ordine con limite di acquisto</h4>
+                    <p>
+                        <i>POST https://www.bitstamp.net/api/buy/</i></p>
+                    <p>
+                        Params:</p>
+                    <ul>
+                        <li>key - API key</li><li>signature - signature</li><li>nonce - nonce</li><li>amount
+                            - importo</li><li>price - prezzo</li></ul>
+                    <p>
+                        Restituisce il dizionario JSON che rappresenta l'ordine:</p>
+                    <ul>
+                        <li>id - ID ordine</li><li>datetime - data e ora</li><li>type - acquistare o vendere
+                            (0 - acquistare; 1 - vendere)</li><li>price - prezzo</li><li>amount - importo</li></ul>
+                    <h4>
+                        Ordine con limite di vendita</h4>
+                    <p>
+                        <i>POST https://www.bitstamp.net/api/sell/</i></p>
+                    <p>
+                        Params:</p>
+                    <ul>
+                        <li>key - API key</li><li>signature - signature</li><li>nonce - nonce</li><li>amount
+                            - importo</li><li>price - prezzo</li></ul>
+                    <p>
+                        Restituisce il dizionario JSON che rappresenta l'ordine:</p>
+                    <ul>
+                        <li>id - ID ordine</li><li>datetime - data e ora</li><li>type - acquistare o vendere
+                            (0 - acquistare; 1 - vendere)</li><li>price - prezzo</li><li>amount - importo</li></ul>
+                    <h4>
+                        Controllare il codice Bitstamp</h4>
+                    <p>
+                        <i>POST https://www.bitstamp.net/api/check_code/</i></p>
+                    <p>
+                        Params:</p>
+                    <ul>
+                        <li>key - API key</li><li>signature - signature</li><li>nonce - nonce</li><li>code -
+                            Codice Bitstamp per controllare</li></ul>
+                    <p>
+                        Restituisce JSON dizionario contenente la quantità di USD e BTC inclusa nel codice
+                        bitstamp dato.</p>
+                    <h4>
+                        Riscattare il codice Bitstamp</h4>
+                    <p>
+                        <i>POST https://www.bitstamp.net/api/redeem_code/</i></p>
+                    <p>
+                        Params:</p>
+                    <ul>
+                        <li>key - API key</li><li>signature - signature</li><li>nonce - nonce</li><li>code -
+                            Bitstamp codice da riscattare</li></ul>
+                    <p>
+                        Restituisce JSON dizionario contenente l'importo di USD e BTC aggiunti al conto
+                        dell'utente.</p>
+                    <h4>
+                        Richiesta di prelievo</h4>
+                    <p>
+                        <i>POST https://www.bitstamp.net/api/withdrawal_requests/</i></p>
+                    <p>
+                        Params:</p>
+                    <ul>
+                        <li>key - API key</li><li>signature - signature</li><li>nonce - nonce</li></ul>
+                    <p>
+                        Restituisce JSON elenco di richieste di prelievo. Ogni richiesta è rappresentata
+                        come dizionario:</p>
+                    <ul>
+                        <li>id - ID ordine</li><li>datetime - data e ora</li><li>type - (0 - SEPA; 1 - bitcoin;
+                            2 - bonifico bancario; 3 e 4 - codice bitstamp; 5 - codice Mt.Gox)</li><li>amount -
+                                importo</li><li>status - (0 - aperta; 1 - in corso; 2 - finita; 3 - annullata; 4 - fallita)</li><li>
+                                    data - dati di richiesta di prelievo supplementare (codice Mt.Gox, ecc.)</li></ul>
+                    <h4>
+                        Ritiro di bitcoin</h4>
+                    <p>
+                        <i>POST https://www.bitstamp.net/api/bitcoin_withdrawal/</i></p>
+                    <p>
+                        Params:</p>
+                    <ul>
+                        <li>key - API key</li><li>signature - signature</li><li>nonce - nonce</li><li>amount
+                            - importo bitcoin</li><li>address - indirizzo bitcoin</li></ul>
+                    <p>
+                        Restituisce "vero" se terminata con successo.</p>
+                    <h4>
+                        Indirizzo di deposito bitcoin</h4>
+                    <p>
+                        <i>POST https://www.bitstamp.net/api/bitcoin_deposit_address/</i></p>
+                    <p>
+                        Params:</p>
+                    <ul>
+                        <li>key - API key</li><li>signature - signature</li><li>nonce - nonce</li></ul>
+                    <p>
+                        Restituisce l'indirizzo del deposito bitcoin.</p>
+                    <h4>
+                        Depositi di bitcoin non confermate</h4>
+                    <p>
+                        <i>POST https://www.bitstamp.net/api/unconfirmed_btc/</i></p>
+                    <p>
+                        Params:</p>
+                    <ul>
+                        <li>key - API key</li><li>signature - signature</li><li>nonce - nonce</li></ul>
+                    <p>
+                        Returns JSON list of unconfirmed bitcoin transactions. Each transaction is represented
+                        as dictionary:</p>
+                    <ul>
+                        <li>amount - importo bitcoin</li><li>address - Indirizzo deposito usato</li><li>confirmations
+                            - numero di conferme</li></ul>
+                    <h4>
+                        Ritiro di ripple</h4>
+                    <p>
+                        <i>POST https://www.bitstamp.net/api/ripple_withdrawal/</i></p>
+                    <p>
+                        Params:</p>
+                    <ul>
+                        <li>key - API key</li><li>signature - signature</li><li>nonce - nonce</li><li>amount
+                            - importo in valuta</li><li>address - indirizzo bitcoin</li><li>currency - valuta</li></ul>
+                    <p>
+                        Restituisce "vero" se terminata con successo.</p>
+                    <h4>
+                        Indirizzo deposito Ripple</h4>
+                    <p>
+                        <i>POST https://www.bitstamp.net/api/ripple_address/</i></p>
+                    <p>
+                        Params:</p>
+                    <ul>
+                        <li>key - API key</li><li>signature - signature</li><li>nonce - nonce</li></ul>
+                    <p>
+                        Restituisce l'indirizzo del deposito ripple.</p>
+                </div>
+            </div>
+            <!-- end Main Content -->
+        </div>
+        <!-- end container -->
+    </div>
+    <!-- end cell -->
+    <!-- Foot -->
+    <footer class="main_footer"></footer>
+</body>
+</html>

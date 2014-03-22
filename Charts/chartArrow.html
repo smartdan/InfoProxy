@@ -1,0 +1,50 @@
+﻿<!--
+You are free to copy and use this sample in accordance with the terms of the
+Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Variation</title>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+
+        google.load('visualization', '1', { packages: ['table'] });
+
+        function drawVisualization() {
+
+            // Create and populate the data table.
+            //       var data = new google.visualization.DataTable();
+            //            data.addColumn('string', 'Department');
+            //            data.addColumn('number', 'Revenues Change');
+            //            data.addRows([
+            //        ['Computer', { v: 12, f: '12.0%'}],
+            //        ['Sports', { v: -7.3, f: '-7.3%'}],
+            //        ['Toys', { v: 0, f: '0%'}],
+            //        ['Electronics', { v: -2.1, f: '-2.1%'}],
+            //        ['Food', { v: 22, f: '22.0%'}]
+            //      ]);
+
+            ###data###
+
+
+            // Create and draw the visualization.
+            var table = new google.visualization.Table(document.getElementById('visualization'));
+
+            var formatter = new google.visualization.TableArrowFormat();
+            formatter.format(data, 1); // Apply formatter to second column
+
+            table.draw(data, { allowHtml: true, showRowNumber: true });
+
+        }
+
+        google.setOnLoadCallback(drawVisualization);
+    </script>
+</head>
+<body style="font-family: Arial; border: 0 none; background-color:Menu">
+    <div id="visualization" style="width: 100%; height: 100px; text-align:center; ">
+    </div>
+</body>
+</html>
+​

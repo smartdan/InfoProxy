@@ -1,0 +1,73 @@
+﻿<!--
+You are free to copy and use this sample in accordance with the terms of the
+Apache license (http://www.apache.org/licenses/LICENSE-2.0.html)
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Gauges </title>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        google.load('visualization', '1', { packages: ['gauge'] });
+    </script>
+    <script type="text/javascript">
+
+            var low  = ###low###;
+            var last = ###last###;
+            var high = ###high###;
+            var min = (low - 50) > 0 ? (low - 50) : 0;
+        var data;
+
+        function init() {
+
+            var options = {
+                min: low,
+                max: high,
+                redFrom: (high - 10),
+                redTo: high,
+                height: 160,
+                yellowFrom: (high - 15),
+                yellowTo: (high - 10),
+                minorTicks: 1,
+                animation: {
+                    duration: 1000,
+                    easing: 'out'
+                },
+                vAxis: { minValue: 0, maxValue: 1000 }
+            };
+
+            data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Last', last]
+        ]);
+
+            var chart = new google.visualization.Gauge(document.getElementById('visualization'));
+
+            function drawChart() {
+                chart.draw(data, options);
+            }
+
+            
+
+            drawChart();
+        }
+
+		 google.setOnLoadCallback(init);
+
+         function updateChart(value) {
+            alert("updateChart new value: " + value);
+            var val = data.getValue(1, 1);
+            alert("updateChart old value: " + val);
+            data.setValue(1, 1, value);
+            drawChart();
+        }
+
+    </script>
+</head>
+<body style="font-family: Arial; border: 0 none;">
+    <div id="visualization" style="width: 100%; height: 100%;">
+    </div>
+</body>
+</html>
+​
